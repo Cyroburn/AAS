@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Attendance Portal</title>
+		<script src="html5-qrcode.min.js" type="application/x-javascript"></script>
+		<style>
+			@media screen and (min-width: 900px) and (min-height: 400px){
+				.contents {
+					border: 2px solid black;
+				}
+				.qrcodescanner {
+					width: 540px;
+					margin-left: 28%;
+				}
+			}
+			@media screen and (max-width: 420px) and ( max-height: 780px){
+				.contents {
+					border: 2px solid green;
+				}
+			}
+		</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+    <body>
+        <div class="contents">
+			<div class="qrcodescanner" id="reader"></div>
+        	<form id="lrnform" method="POST" action="private/main.php">
+				<h1>Good Day!</h1>
+				<input type="textbox" name="lrn" id="u_lrn">
+        	</form>
+		</div>
+        <script>
+			function onScanSuccess(decodedText, decodedResult) {
+				let u_lrn = document.getElementById("u_lrn");
+				lrn = String(decodedText);
+				if (lrn.length == 12){
+					alert('Press "OK" to complete the sign in');
+					u_lrn.value=decodedText;
+					document.getElementById('lrnform').submit();
+				}else{
+					alert("Input Error")
+					alert(lrn);
+				}
+			}
+			function onScanFailure(error) {
+			// handle scan failure, usually better to ignore and keep scanning.
+			// for example:
+				console.warn(`Code scan error = ${error}`);
+			}
+			let html5QrcodeScanner = new Html5QrcodeScanner(
+			"reader"
+			,{ fps: 60, qrbox: {width: 250, height: 250} },/* verbose= */ false);
+			html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        </script>
+    </body>
+</html>
